@@ -1,5 +1,6 @@
 package com.sikavo.libraflow.book;
 
+import com.sikavo.libraflow.user.model.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,10 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(unique = true)
     private String ISBN;
@@ -34,6 +39,7 @@ public class Book {
 
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
+
 
     @PrePersist
     public void onCreate () {

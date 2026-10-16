@@ -1,6 +1,11 @@
 package com.sikavo.libraflow.user.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
+import java.util.UUID;
+
 public record UserRequest(
-        String userName,
-        String email
+        @NotBlank String userName,
+        @NotBlank String email,
+        UUID libraryCode
 ) { }

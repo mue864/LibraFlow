@@ -21,8 +21,7 @@ public class UserMapper {
         user.setUserName(normalizeStrings(userRequest.userName()));
         user.setEmail(normalizeStrings(userRequest.email()));
         user.setUserActive(true);
-//        library code is set later on not here
-//        password not set here too
+        user.setLibraryCode(userRequest.libraryCode());
 
         return user;
     };

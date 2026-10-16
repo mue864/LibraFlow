@@ -1,6 +1,6 @@
 package com.sikavo.libraflow.book;
 
-import com.sikavo.libraflow.user.model.User;
+import com.sikavo.libraflow.library.model.Library;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,8 +19,8 @@ public class Book {
     private Long bookId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "library_id")
+    private Library library;
 
     @Column(unique = true)
     private String ISBN;

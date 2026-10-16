@@ -28,8 +28,6 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toEntity(request);
         Library library = new Library();
 
-//        then save the library code for the user
-        user.setLibraryCode(library.getLibraryCode());
         User savedUser = userRepository.save(user);
 
         return userMapper.toResponse(savedUser);

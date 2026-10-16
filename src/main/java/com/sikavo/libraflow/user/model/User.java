@@ -20,9 +20,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID userId;
 
-    @ManyToOne
-    @JoinColumn(name = "library_code", nullable = false)
-    private Library library;
+    @Column(name = "library_code")
+    private UUID libraryCode;
 
     @Column(name = "user_name", length = 100, unique = true)
     private String userName;
@@ -33,8 +32,6 @@ public class User {
     @Column
     private String password;
 
-    @Column(name = "books_borrowed")
-    private List<Book> booksBorrowed;
 
     @Column
     private boolean isUserActive = false;
@@ -47,4 +44,6 @@ public class User {
 
     @PreUpdate
     private void onUpdate () {this.updatedAt = LocalDateTime.now(); };
+
+
 }

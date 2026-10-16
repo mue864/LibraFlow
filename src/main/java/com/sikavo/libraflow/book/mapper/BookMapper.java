@@ -3,6 +3,8 @@ package com.sikavo.libraflow.book.mapper;
 import com.sikavo.libraflow.book.Book;
 import com.sikavo.libraflow.book.dto.BookRequest;
 import com.sikavo.libraflow.book.dto.BookResponse;
+import com.sikavo.libraflow.library.dto.LibraryResponse;
+import com.sikavo.libraflow.library.model.Library;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Component;
 public class BookMapper {
 
     public String normalizeStrings(String value) {
-        log.info("String values: {}", value);
         if (value == null || value.isBlank()) {
             return null;
         }
@@ -19,6 +20,7 @@ public class BookMapper {
     }
     public Book toEntity (BookRequest request) {
         Book book = new Book();
+        Library library = new Library();
         book.setISBN(normalizeStrings(request.ISBN()));
         log.info("Normalized ISBN: {}", normalizeStrings(request.ISBN()));
         book.setTitle(normalizeStrings(request.title()));
@@ -26,6 +28,7 @@ public class BookMapper {
         book.setAuthor(normalizeStrings(request.author()));
         book.setAvailableCopies(request.totalCopies());
         book.setTotalCopies(request.totalCopies());
+//        book.setLibrary(library);
 
         return book;
     }

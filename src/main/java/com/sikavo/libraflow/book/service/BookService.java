@@ -15,5 +15,4 @@ public interface BookService {
     void deleteBookById(Long bookId);
     List<BookResponse> searchBookByAuthorName(String author);
     Optional<BookResponse> searchBookByIsbn(String isbn);
-
 }

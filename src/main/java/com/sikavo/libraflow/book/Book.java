@@ -34,6 +34,9 @@ public class Book {
     @Column(nullable = false)
     private String author;
 
+    @Column(name = "is_deleted")
+    private boolean deleted = false;
+
     private int totalCopies;
     private int availableCopies;
 

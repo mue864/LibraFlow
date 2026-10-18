@@ -3,11 +3,14 @@ package com.sikavo.libraflow.book.service.impl;
 import com.sikavo.libraflow.book.Book;
 import com.sikavo.libraflow.book.dto.BookRequest;
 import com.sikavo.libraflow.book.dto.BookResponse;
+import com.sikavo.libraflow.book.dto.UpdateBookRequest;
+import com.sikavo.libraflow.book.dto.UpdateBookResponse;
 import com.sikavo.libraflow.book.mapper.BookMapper;
 import com.sikavo.libraflow.book.repository.BookRepository;
 import com.sikavo.libraflow.book.service.BookService;
 import com.sikavo.libraflow.common.exception.BookAlreadyExistsException;
 import com.sikavo.libraflow.common.exception.BookNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +36,10 @@ public class BookServiceImpl implements BookService {
         return value.trim();
     }
 
+    public boolean checkIfStringNull(String value) {
+        return value != null && !value.isBlank();
+    }
+
     @Override
     public BookResponse createBook(BookRequest request) {
         if (bookRepository.existsByISBN(normalizeStringValues(request.ISBN()))) {
@@ -45,12 +52,27 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void deleteBookById(Long bookId) {
+    public UpdateBookResponse softDeleteBook(Long bookId) {
         if (!bookRepository.existsById(bookId)) {
-            throw new BookNotFoundException("Book does not exists");
+            throw new BookNotFoundException("Book does not exist");
         }
-        bookRepository.deleteBookByBookId(bookId);
+//        we are not hard deleting, we soft delete for records
+        Book book = bookRepository.findBookByBookId(bookId);
+        book.setDeleted(true);
+        bookRepository.save(book);
+
+        return new UpdateBookResponse(
+                book.getBookId(),
+                book.getAuthor(),
+                book.getTitle(),
+                book.getISBN(),
+                book.getEdition(),
+                book.getTotalCopies(),
+                book.isDeleted(),
+                book.getUpdateDate()
+        );
     }
+
 
     @Override
     public List<BookResponse> searchBookByAuthorName(String author) {
@@ -66,5 +88,40 @@ public class BookServiceImpl implements BookService {
         isbn = normalizeStringValues(isbn);
         if (isbn == null || isbn.isBlank()) return Optional.empty();
         return bookRepository.findBookByISBNIgnoreCase(isbn);
+    }
+
+    @Transactional
+    @Override
+    public UpdateBookResponse editBook(UpdateBookRequest request) {
+        Book book = bookRepository.findBookByBookId(request.bookId());
+
+        if (!bookRepository.existsById(request.bookId())) {
+            throw new BookNotFoundException("Book not found");
+        }
+
+        if (checkIfStringNull(request.title())) {
+            book.setTitle(request.title());
+        }
+
+        if (checkIfStringNull(request.edition())) {
+            book.setEdition(request.edition());
+        }
+
+        if (checkIfStringNull(request.author())) {
+            book.setAuthor(request.author());
+        }
+
+        bookRepository.save(book);
+
+        return new UpdateBookResponse(
+                book.getBookId(),
+                book.getAuthor(),
+                book.getTitle(),
+                book.getISBN(),
+                book.getEdition(),
+                book.getTotalCopies(),
+                book.isDeleted(),
+                book.getUpdateDate()
+        );
     }
 }

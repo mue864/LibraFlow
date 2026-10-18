@@ -13,3 +13,6 @@ spring:
       validation-timeout: ${SPRING_DATASOURCE_HIKARI_VALIDATION_TIMEOUT:1000}
       idle-timeout: ${SPRING_DATASOURCE_HIKARI_IDLE_TIMEOUT:60000}
       max-lifetime: ${SPRING_DATASOURCE_HIKARI_MAX_LIFETIME:180000}
+  jpa:
+    hibernate:
+      ddl-auto: update

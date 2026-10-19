@@ -1,5 +1,6 @@
 package com.sikavo.libraflow.book.controller;
 
+import com.sikavo.libraflow.book.Book;
 import com.sikavo.libraflow.book.dto.BookRequest;
 import com.sikavo.libraflow.book.dto.BookResponse;
 import com.sikavo.libraflow.book.dto.UpdateBookRequest;
@@ -8,9 +9,7 @@ import com.sikavo.libraflow.book.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -88,5 +87,39 @@ public class BookController {
         UpdateBookResponse bookUpdate = bookService.editBook(updateBookRequest);
 
         return ResponseEntity.ok(bookUpdate);
+    }
+
+    @Operation(
+            summary = "List All books",
+            description = "Returns all undeleted books"
+    )
+    @GetMapping("/books/available")
+    public ResponseEntity<List<Book>> findAllBooks() {
+        log.info("Start find books controller");
+        List<Book> books = bookService.findAllUndeletedBooks();
+        return ResponseEntity.ok(books);
+    }
+
+    @Operation(
+            summary = "List Deleted books",
+            description = "Filters and lists books that are deleted"
+    )
+    @GetMapping("books/deleted")
+    public ResponseEntity<List<Book>> findDeletedBooks() {
+        log.info("Start find deleted books controller");
+
+        List<Book> deletedBooks = bookService.findAllDeletedBooks();
+        return ResponseEntity.ok(deletedBooks);
+    }
+
+    @Operation(
+            summary = "List All books",
+            description = "Lists all books either deleted or not"
+    )
+    @GetMapping("/books/all")
+    public ResponseEntity<List<Book>> listAllBooks(){
+        log.info("Start list all books controller");
+        List<Book> books = bookService.findAllBooks();
+        return ResponseEntity.ok(books);
     }
 }

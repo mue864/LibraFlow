@@ -73,7 +73,6 @@ public class BookServiceImpl implements BookService {
         );
     }
 
-
     @Override
     public List<BookResponse> searchBookByAuthorName(String author) {
         author = normalizeStringValues(author);
@@ -123,5 +122,20 @@ public class BookServiceImpl implements BookService {
                 book.isDeleted(),
                 book.getUpdateDate()
         );
+    }
+
+    @Override
+    public List<Book> findAllUndeletedBooks() {
+        return bookRepository.findAll();
+    }
+
+    @Override
+    public List<Book> findAllDeletedBooks() {
+        return bookRepository.findByDeletedFalse();
+    };
+
+    @Override
+    public List<Book> findAllBooks() {
+        return bookRepository.findAllBooks();
     }
 }

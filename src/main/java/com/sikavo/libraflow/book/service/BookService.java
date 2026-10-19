@@ -18,4 +18,8 @@ public interface BookService {
     List<BookResponse> searchBookByAuthorName(String author);
     Optional<BookResponse> searchBookByIsbn(String isbn);
     UpdateBookResponse editBook(UpdateBookRequest request);
+
+    List<Book> findAllUndeletedBooks();
+    List<Book> findAllDeletedBooks();
+    List<Book> findAllBooks();
 }

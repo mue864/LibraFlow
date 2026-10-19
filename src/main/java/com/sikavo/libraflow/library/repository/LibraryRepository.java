@@ -13,16 +13,9 @@ import java.util.UUID;
 
 @Repository
 public interface LibraryRepository extends JpaRepository<Library, UUID> {
-    @Override
-    List<Library> findAll(@NonNull Sort sort);
-
     List<Library> findLibraryByLibraryName(String libraryName);
-
 //    List<Library> findLibraryByBookList(List<Book> bookList);
-
     Optional<Library> findLibraryByLibraryCode(UUID libraryCode);
-
     Optional<Library> findLibrariesByLibraryLocation(String libraryLocation);
-
     void deleteLibraryByLibraryCode(UUID libraryCode);
 }
